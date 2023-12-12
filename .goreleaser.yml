@@ -1,0 +1,67 @@
+builds:
+  - id: book
+    main: ./book.go
+    dir: ./app/desktop
+    binary: book
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+      - android
+    goarch:
+      - "386"
+      - amd64
+      - arm
+      - arm64
+    goarm:
+      - "6"
+      - "7"
+    ignore:
+      - goos: linux
+        goarch: arm
+        goarm: "7"
+      - goos: windows
+        goarch: arm
+        goarm: "7"
+      - goos: android
+        goarch: arm
+        goarm: "6"
+      - goos: android
+        goarch: arm
+        goarm: "7"
+      - goos: android
+        goarch: "386"
+
+archives:
+  - builds:
+      - book
+    name_template: 'book_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+
+nfpms:
+  - license: CC0-1.0 License
+    maintainer: Javad Rajabzadeh <ja7ad@live.com>
+    homepage: https://github.com/GoFarsi/book
+    bindir: /usr/local/bin
+    description: GoFarsi Book desktop version (offline)
+    formats:
+      - deb
+      - rpm
+
+checksum:
+  name_template: 'book_checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - Merge pull request
+      - Merge branch
